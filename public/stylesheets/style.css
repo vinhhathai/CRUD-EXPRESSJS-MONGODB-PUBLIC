@@ -1,0 +1,48 @@
+html {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.back-btn {
+  text-decoration: none;
+  padding: 8px;
+  border-radius: 4px;
+  color: black;
+}
+
+.btn {
+  margin: 0 4px;
+}
+.a-btn {
+  color: white;
+  text-decoration: none;
+}
+
+.card {
+  margin: 4%;
+}
+.card-title,
+.card-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+img {
+  object-fit: cover;
+  height: 200px;
+}
+.video-description,
+.video-center,
+.name-video {
+  text-align: center;
+}
+.back-and-trash {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 300px;
+}
+.select-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <title>Thùng rác</title>
+</head>
+
+<body>
+    <div class="container">
+        <form action="/movie/update/handler-actions" class="form-hanlder-actions" method="POST">
+            <div class="back-and-trash">
+                <button type="button" class="btn btn-primary" style="margin-top: 3%;">
+                    <a class="back-btn" style="color: white; text-decoration: none; " aria-current="page" href="/">Trở
+                        về</a>
+
+                </button>
+            </div>
+            <h1 style="margin: 3% 0 3% 0">Thùng rác
+            </h1>
+            <div class="select-action">
+                <div>
+
+                    <input type="checkbox" id="check-all" /> <label for="check-all"> Chọn tất cả</label>
+                </div>
+                <select class="form-select w-25 p-1" aria-label="Default select example" name="action" required>
+                    <option value="">-- Chọn hành động --</option>
+                    <option value="delete">Xóa vĩnh viễn (không thể khôi phục)</option>
+                    <option value="restore">Khôi phục</option>
+                </select>
+
+                <button type="button" class="btn btn-success disabled check-all-submit-btn action-btn">Thực
+                    thi</button>
+            </div>
+
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Chọn</th>
+                        <th scope="col">#</th>
+                        <th scope="col">Tên</th>
+                        <th scope="col">Mô tả</th>
+                        <th scope="col">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <% for (var i=0; i < data.length; i++) { %>
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="check-item" value="<%= data[i]._id %>" name="id" />
+                            </td>
+                            <td scope="row">
+                                <%= i+1 %>
+                            </td>
+                            <td>
+                                <%= data[i].name %>
+                            </td>
+                            <td>
+                                <%= data[i].description %>
+                            </td>
+                            <td>
+                                <a href="" data-id="<%= data[i]._id %> " class="restore-link">Khôi phục</a> |
+                                <a href="" data-id="<%= data[i]._id %> " class="delete-link" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">Xóa vĩnh viễn</a>
+                            </td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+        </form>
+        <!--Modal-->
+        <!-- Button trigger modal -->
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Bạn có chắn chắn muốn xóa vĩnh viễn movie
+                            này?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Hành động này sẽ không thể khôi phục
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thôi</button>
+                        <button type="button" class="btn btn-primary  " id="accept-for-delete">Vẫn xóa</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--SCRIPT-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            //Submit with checkbox
+            const submitFormCheckbox = $('.form-hanlder-actions');
+            const actionBtn = $('.action-btn')
+            actionBtn.click(() => {
+                submitFormCheckbox.submit();
+            })
+
+
+            // Check all with checkbox
+            const checkAll = $('#check-all');
+            const checkItem = $('.check-item');
+            const checkAllSubmitBtnElement = $('.check-all-submit-btn');
+            checkAll.click(() => {
+                const isChecked = checkAll.prop('checked');
+                checkItem.prop('checked', isChecked);
+                checkAllSubmitBtn();
+            });
+
+            checkItem.click(() => {
+                const checkedCount = checkItem.filter(':checked').length;
+                const totalCount = checkItem.length;
+                checkAll.prop('checked', checkedCount === totalCount);
+                checkAllSubmitBtn();
+            });
+
+            function checkAllSubmitBtn() {
+                if (checkItem.filter(':checked').length > 0 || checkAll.prop('checked')) {
+                    checkAllSubmitBtnElement.removeClass('disabled')
+                } else {
+                    checkAllSubmitBtnElement.addClass('disabled')
+                }
+            }
+
+
+            //Restore movie
+            var restoreLinks = document.getElementsByClassName('restore-link');
+            for (var i = 0; i < restoreLinks.length; i++) {
+                restoreLinks[i].addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var form = document.createElement('form');
+                    form.action = "/movie/update/restore/" + $(this).data('id').trim();
+                    form.method = 'POST';
+                    document.body.appendChild(form);
+                    form.submit();
+                    form.remove();
+                });
+            }
+
+            //Delete for sure
+            var deleteLink = document.getElementsByClassName('delete-link');
+            var deleteBtnForSure = document.getElementById('accept-for-delete');
+            for (var i = 0; i < deleteLink.length; i++) {
+                deleteLink[i].addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var idDelete = this.getAttribute('data-id').trim(); // Loại bỏ khoảng trắng
+                    deleteBtnForSure.addEventListener('click', function (e) {
+                        var form = document.createElement('form');
+                        form.action = "/movie/update/delete/sure/" + idDelete + "?_method=DELETE";
+                        form.method = 'POST';
+                        document.body.appendChild(form);
+                        form.submit();
+                        form.remove();
+                    })
+                });
+
+            }
+
+
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+            integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
+            integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>

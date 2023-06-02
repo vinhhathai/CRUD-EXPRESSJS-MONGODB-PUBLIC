@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Xem phim</title>
+  <link rel="stylesheet" href="../stylesheets/style.css" />
+  <!-- Bootstrap 5 CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css"
+    integrity="sha512-CxudwBph42Jt1C4Z4SDs+psfPrJdwkrkRblRz48Q2xl87+Tq3l28aTGHsl1YYjHStCf0k2N+Ol9ZZEZKjyvyxw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <button type="button" class="btn btn-primary">
+              <a class="back-btn" aria-current="page" href="javascript:history.back()">Trở về</a>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h1 class="text-center my-4 name-video">
+          <%= data.name%>
+        </h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col d-flex justify-content-center video-center">
+        <iframe width="942" height="530" src="<%=data.video %>" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <p class="video-description">
+      <%= data.description %>
+    </p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"
+    integrity="sha512-nZ1ymEFOw7AKuB/TpU6rk8U6IptUAp7GwezN84/6TYT3TqTjw7FJ1s44sN7y9vgMkcdHQ+iD1fvnmWTQPnXd8Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+
+</html>
