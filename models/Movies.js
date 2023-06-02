@@ -5,7 +5,7 @@ var mongoose_delete = require("mongoose-delete");
 mongoose.plugin(slug);
 
 mongoose
-  .connect(process.env.DATABASE, {
+  .connect(process.env.DATABASE || "mongodb+srv://sangtaotrehtv:777744441111@vinhdev29.allfguh.mongodb.net/Movies?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
